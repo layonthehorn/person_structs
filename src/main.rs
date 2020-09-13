@@ -29,6 +29,8 @@ fn main() {
     if !thomas.can_swim(){
         println!("Thomas still can't swim.")
     }
+    println!("Thomas's SSN is {}",thomas.get_uuid());
+    println!("Darren's CRN is {}",darren.get_uuid());
 }
 
 

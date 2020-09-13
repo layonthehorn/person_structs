@@ -1,3 +1,5 @@
+use uuid::Uuid;
+
 #[derive(Clone,Copy,Ord, PartialOrd, Eq, PartialEq)]
 #[allow(dead_code)]
 pub enum Gender{
@@ -64,11 +66,12 @@ impl Name {
 #[derive(Ord, PartialOrd, Eq)]
 pub struct Person {
     names: Name,
+    uuid: Uuid,
     age: u32,
     gender: Gender,
     nationality: Nationality,
-    friends: Vec<Person>,
-    family: Vec<Person>,
+    friends: Vec<StoragePerson>,
+    family: Vec<StoragePerson>,
     skills: Skills,
 }
 
@@ -81,6 +84,7 @@ impl Clone for Person{
                 last_name: self.names.last_name.clone(),
                 middle_name: self.names.middle_name.clone()
             },
+            uuid: self.uuid,
             age: self.age,
             gender: self.gender,
             nationality: self.nationality,
@@ -93,7 +97,7 @@ impl Clone for Person{
 
 impl PartialEq for Person {
     fn eq(&self, other: &Self) -> bool {
-        self.get_full_name() == other.get_full_name() && self.age == other.age
+       self.uuid == other.uuid
     }
 }
 #[allow(dead_code)]
@@ -101,6 +105,7 @@ impl Person {
     pub fn new(first: String, middle: String, last: String, a: u32, gend: Gender, nation: Nationality) -> Person {
         Person{
             names: Name::new(first,middle,last),
+            uuid: uuid::Uuid::new_v4(),
             age: a,
             gender: gend,
             nationality: nation,
@@ -110,6 +115,9 @@ impl Person {
 
         }
 
+    }
+    pub fn get_uuid(&self) -> Uuid{
+        self.uuid
     }
     pub fn can_drive(&self) -> bool {
         self.skills.can_drive
@@ -126,29 +134,33 @@ impl Person {
     }
 
     pub fn add_friend(&mut self,friend: &Person) {
-        self.friends.push(friend.clone());
+        self.friends.push(StoragePerson{
+            uuid:friend.uuid,
+            name: friend.get_full_name()
+        });
 
-    }
-
-    pub fn remove_family(&mut self, family: &Person){
-        self.family.retain(|fam| fam != family)
-    }
-
-    pub fn remove_friend(&mut self, friend: &Person) {
-        self.friends.retain(|fre| fre != friend)
     }
 
     pub fn add_family(&mut self,family: &Person) {
-        self.family.push(family.clone());
+        self.family.push(StoragePerson{
+            uuid: family.uuid,
+            name: family.get_full_name()
+        });
 
     }
 
     pub fn is_friend(&self,friend: &Person) -> bool{
-       self.friends.contains(friend)
+       self.friends.contains(&StoragePerson{
+           uuid: friend.uuid,
+           name: friend.get_full_name()
+       })
     }
 
     pub fn is_family(&self,family: &Person ) -> bool {
-        self.family.contains(family)
+        self.family.contains(&StoragePerson{
+            uuid: family.uuid,
+            name: family.get_full_name()
+        })
     }
 
     pub fn get_full_name(&self) -> String {
@@ -163,4 +175,20 @@ impl Person {
         self.nationality
     }
 
+}
+
+#[derive(Ord, PartialOrd, Eq, PartialEq)]
+struct StoragePerson{
+    uuid: Uuid,
+    name: String
+
+}
+
+impl Clone for StoragePerson{
+    fn clone(&self) -> Self {
+        StoragePerson{
+            uuid: self.uuid,
+            name: self.name.clone()
+        }
+    }
 }
