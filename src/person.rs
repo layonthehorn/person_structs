@@ -59,7 +59,7 @@ impl Name {
     }
 }
 
-#[derive(Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Ord, PartialOrd, Eq)]
 pub struct Person {
     names: Name,
     age: u32,
@@ -86,6 +86,12 @@ impl Clone for Person{
             family: self.family.clone(),
             skills: Skills { can_drive: self.skills.can_drive, can_swim: self.skills.can_swim }
         }
+    }
+}
+
+impl PartialEq for Person {
+    fn eq(&self, other: &Self) -> bool {
+        self.get_full_name() == other.get_full_name() && self.age == other.age
     }
 }
 
