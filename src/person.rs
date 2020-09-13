@@ -20,6 +20,8 @@ pub enum Nationality {
 struct Skills {
     can_drive: bool,
     can_swim: bool,
+    occupation: String,
+    hobbies: Vec<String>
 }
 
 impl Skills {
@@ -27,6 +29,8 @@ impl Skills {
         Skills {
             can_drive: false,
             can_swim: false,
+            occupation: "None".to_string(),
+            hobbies: vec![]
         }
     }
     fn set_can_swim(&mut self, value: bool) {
@@ -91,6 +95,8 @@ impl Clone for Person {
             skills: Skills {
                 can_drive: self.skills.can_drive,
                 can_swim: self.skills.can_swim,
+                occupation: self.skills.occupation.clone(),
+                hobbies: self.skills.hobbies.clone(),
             },
         }
     }
@@ -121,6 +127,32 @@ impl Person {
             family: vec![],
             skills: Skills::new(),
         }
+    }
+    pub fn get_job(&self)-> String{
+        self.skills.occupation.clone()
+    }
+
+    pub fn get_hobbies(&self) -> Vec<String>{
+        self.skills.hobbies.clone()
+    }
+
+    pub fn change_job(&mut self, new_job: String){
+        self.skills.occupation = new_job;
+    }
+
+    pub fn quit_job(&mut self){
+        self.skills.occupation = "None".to_string()
+    }
+
+    pub fn add_hobby(&mut self, hobby: String) {
+        if ! self.skills.hobbies.contains(&hobby){
+            self.skills.hobbies.push(hobby);
+        }
+    }
+
+    pub fn remove_hobby(&mut self, hobby: String) {
+        self.skills.hobbies.retain(|hob| hob != &hobby)
+
     }
     pub fn remove_friend(&mut self, person: &Person) {
         self.friends.retain(|x| {

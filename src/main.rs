@@ -13,14 +13,18 @@ fn main() {
     );
     let mut darren = Person::new(
         "Darren".to_string(),
-        "Lion".to_string(),
+        "James".to_string(),
         "Capper".to_string(),
         27,
         Gender::Male,
         Nationality::Australia,
     );
     thomas.add_family(&darren);
+    thomas.change_job("IT Helpdesk".to_string());
+    thomas.add_hobby("Programming".to_string());
     darren.add_family(&thomas);
+    darren.add_hobby("Writing".to_string());
+    darren.change_job("Rally Driver".to_string());
     darren.learn_to_drive();
 
     if thomas.is_family(&darren) {
@@ -67,6 +71,7 @@ fn still_looking() -> bool{
         Ok(t) => t,
         Err(_e)=> "n".to_string()
     };
+    println!();
     check == "Y".to_string() || check == "y".to_string()
 
 
@@ -84,11 +89,18 @@ fn looking_at_people(people: &Vec<Person>){
         Ok(t) =>t,
         Err(_e) => "".to_string()
     };
+    println!();
     for entry in people.iter(){
         if entry.get_first_name() == first_name{
             println!("Full Name: {}", entry.get_full_name());
             println!("Nationality: {:?}", entry.get_nationality());
-            println!("Gender: {:?}", entry.get_gender())
+            println!("Gender: {:?}", entry.get_gender());
+            println!("Job {}",entry.get_job());
+            print!("Hobbies: ");
+            for hobby in entry.get_hobbies().iter(){
+                print!("{} ", hobby)
+            }
+            println!();
 
         }
     }
