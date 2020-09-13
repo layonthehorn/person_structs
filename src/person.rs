@@ -90,6 +90,14 @@ impl Person {
 
     }
 
+    pub fn remove_family(&mut self, family: Person){
+        self.family.retain(|fam| *fam != family)
+    }
+
+    pub fn remove_friend(&mut self, friend: Person) {
+        self.friends.retain(|fre| *fre != friend)
+    }
+
     pub fn add_family(&mut self,family: Person) {
         self.family.push(family);
 
