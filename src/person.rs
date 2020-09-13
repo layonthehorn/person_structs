@@ -70,6 +70,25 @@ pub struct Person {
     skills: Skills,
 }
 
+// allows cloning Person traits
+impl Clone for Person{
+    fn clone(&self) -> Self {
+        Person{
+            names: Name {
+                first_name: self.names.first_name.clone(),
+                last_name: self.names.last_name.clone(),
+                middle_name: self.names.middle_name.clone()
+            },
+            age: self.age,
+            gender: self.gender,
+            nationality: self.nationality,
+            friends: self.friends.clone(),
+            family: self.family.clone(),
+            skills: Skills { can_drive: self.skills.can_drive, can_swim: self.skills.can_swim }
+        }
+    }
+}
+
 impl Person {
     pub fn new(first: String, middle: String, last: String, a: u32, gend: Gender, nation: Nationality) -> Person {
         Person{
@@ -85,21 +104,21 @@ impl Person {
 
     }
 
-    pub fn add_friend(&mut self,friend: Person) {
-        self.friends.push(friend);
+    pub fn add_friend(&mut self,friend: &Person) {
+        self.friends.push(friend.clone());
 
     }
 
-    pub fn remove_family(&mut self, family: Person){
-        self.family.retain(|fam| *fam != family)
+    pub fn remove_family(&mut self, family: &Person){
+        self.family.retain(|fam| fam != family)
     }
 
-    pub fn remove_friend(&mut self, friend: Person) {
-        self.friends.retain(|fre| *fre != friend)
+    pub fn remove_friend(&mut self, friend: &Person) {
+        self.friends.retain(|fre| fre != friend)
     }
 
-    pub fn add_family(&mut self,family: Person) {
-        self.family.push(family);
+    pub fn add_family(&mut self,family: &Person) {
+        self.family.push(family.clone());
 
     }
 
