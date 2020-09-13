@@ -1,10 +1,10 @@
-#[derive(Clone,Copy)]
+#[derive(Clone,Copy,Ord, PartialOrd, Eq, PartialEq)]
 pub enum Gender{
     Male,
     Female
 }
 
-#[derive(Clone,Copy)]
+#[derive(Clone,Copy,Ord, PartialOrd, Eq, PartialEq)]
 pub enum Nationality {
     UnitedStates,
     Australia,
@@ -12,6 +12,7 @@ pub enum Nationality {
     Germany
 }
 
+#[derive(Ord, PartialOrd, Eq, PartialEq)]
 struct Skills{
     can_drive: bool,
     can_swim: bool
@@ -40,6 +41,7 @@ impl Skills{
     }
 }
 
+#[derive(Ord, PartialOrd, Eq, PartialEq)]
 struct Name{
 
     first_name: String,
@@ -57,6 +59,7 @@ impl Name {
     }
 }
 
+#[derive(Ord, PartialOrd, Eq, PartialEq)]
 pub struct Person {
     names: Name,
     age: u32,
@@ -90,6 +93,14 @@ impl Person {
     pub fn add_family(&mut self,family: Person) {
         self.family.push(family);
 
+    }
+
+    pub fn is_friend(&self,friend: &Person) -> bool{
+       self.friends.contains(friend)
+    }
+
+    pub fn is_family(&self,family: &Person ) -> bool {
+        self.family.contains(family)
     }
 
     pub fn get_full_name(&self) -> String {
