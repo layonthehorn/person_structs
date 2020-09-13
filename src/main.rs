@@ -45,4 +45,51 @@ fn main() {
     }
     println!("Thomas's SSN is {}", thomas.get_uuid());
     println!("Darren's CRN is {}", darren.get_uuid());
+
+    let mut looking = true;
+    let people_vec = vec![darren,thomas];
+    while looking{
+        println!("Who do you want to look at?\nEnter the first name.");
+        looking_at_people(&people_vec);
+        looking = still_looking();
+
+    }
+    println!("Goodbye!")
+
+}
+fn still_looking() -> bool{
+    println!("Are you still looking? y/n");
+    let temp = & mut String::new();
+    std::io::stdin()
+        .read_line(temp)
+        .expect("Failed to read line.");
+    let check:String = match temp.trim().parse(){
+        Ok(t) => t,
+        Err(_e)=> "n".to_string()
+    };
+    check == "Y".to_string() || check == "y".to_string()
+
+
+}
+
+fn looking_at_people(people: &Vec<Person>){
+    for entry in people.iter(){
+        print!("{} ",entry.get_first_name())
+    }
+    println!();
+    let name =& mut String::new();
+    std::io::stdin()
+        .read_line(name).expect("Failed to read line.");
+    let first_name: String = match name.trim().parse(){
+        Ok(t) =>t,
+        Err(_e) => "".to_string()
+    };
+    for entry in people.iter(){
+        if entry.get_first_name() == first_name{
+            println!("Full Name: {}", entry.get_full_name());
+            println!("Nationality: {:?}", entry.get_nationality());
+            println!("Gender: {:?}", entry.get_gender())
+
+        }
+    }
 }

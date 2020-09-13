@@ -1,13 +1,13 @@
 use uuid::Uuid;
 
-#[derive(Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Clone, Copy, Ord, PartialOrd, Eq, PartialEq,Debug)]
 #[allow(dead_code)]
 pub enum Gender {
     Male,
     Female,
 }
 
-#[derive(Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Clone, Copy, Ord, PartialOrd, Eq, PartialEq, Debug)]
 #[allow(dead_code)]
 pub enum Nationality {
     UnitedStates,
@@ -190,6 +190,10 @@ impl Person {
             uuid: family.uuid,
             name: family.get_full_name(),
         })
+    }
+
+    pub fn get_first_name(&self) -> String {
+        self.names.first_name.clone()
     }
 
     pub fn get_full_name(&self) -> String {
