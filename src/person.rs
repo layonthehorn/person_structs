@@ -1,62 +1,60 @@
 use uuid::Uuid;
 
-#[derive(Clone,Copy,Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
 #[allow(dead_code)]
-pub enum Gender{
+pub enum Gender {
     Male,
-    Female
+    Female,
 }
 
-#[derive(Clone,Copy,Ord, PartialOrd, Eq, PartialEq)]
+#[derive(Clone, Copy, Ord, PartialOrd, Eq, PartialEq)]
 #[allow(dead_code)]
 pub enum Nationality {
     UnitedStates,
     Australia,
     UnitedKingdom,
-    Germany
+    Germany,
 }
 
 #[derive(Ord, PartialOrd, Eq, PartialEq)]
-struct Skills{
+struct Skills {
     can_drive: bool,
-    can_swim: bool
-
+    can_swim: bool,
 }
 
-impl Skills{
-    fn new() -> Skills{
-        Skills{
+impl Skills {
+    fn new() -> Skills {
+        Skills {
             can_drive: false,
-            can_swim: false
+            can_swim: false,
         }
     }
-    fn set_can_swim(&mut self, value: bool){
+    fn set_can_swim(&mut self, value: bool) {
         // prevents setting the value to false
-        if value{
+        if value {
             self.can_swim = value;
         }
     }
 
-    fn set_can_drive(&mut self, value: bool){
+    fn set_can_drive(&mut self, value: bool) {
         // prevents setting the value to false
-        if value{
+        if value {
             self.can_drive = value;
         }
     }
 }
 
 #[derive(Ord, PartialOrd, Eq, PartialEq)]
-struct Name{
-
+struct Name {
     first_name: String,
     last_name: String,
     middle_name: String,
 }
 
 impl Name {
-    fn new(f: String, m:String,l:String)-> Name{
-        Name{
-            first_name:f,
+    fn new(f: String, m: String, l: String) -> Name {
+        Name {
+            first_name: f,
             middle_name: m,
             last_name: l,
         }
@@ -76,13 +74,13 @@ pub struct Person {
 }
 
 // allows cloning Person traits
-impl Clone for Person{
+impl Clone for Person {
     fn clone(&self) -> Self {
-        Person{
+        Person {
             names: Name {
                 first_name: self.names.first_name.clone(),
                 last_name: self.names.last_name.clone(),
-                middle_name: self.names.middle_name.clone()
+                middle_name: self.names.middle_name.clone(),
             },
             uuid: self.uuid,
             age: self.age,
@@ -90,33 +88,58 @@ impl Clone for Person{
             nationality: self.nationality,
             friends: self.friends.clone(),
             family: self.family.clone(),
-            skills: Skills { can_drive: self.skills.can_drive, can_swim: self.skills.can_swim }
+            skills: Skills {
+                can_drive: self.skills.can_drive,
+                can_swim: self.skills.can_swim,
+            },
         }
     }
 }
 
 impl PartialEq for Person {
     fn eq(&self, other: &Self) -> bool {
-       self.uuid == other.uuid
+        self.uuid == other.uuid
     }
 }
 #[allow(dead_code)]
 impl Person {
-    pub fn new(first: String, middle: String, last: String, a: u32, gend: Gender, nation: Nationality) -> Person {
-        Person{
-            names: Name::new(first,middle,last),
+    pub fn new(
+        first: String,
+        middle: String,
+        last: String,
+        a: u32,
+        gend: Gender,
+        nation: Nationality,
+    ) -> Person {
+        Person {
+            names: Name::new(first, middle, last),
             uuid: uuid::Uuid::new_v4(),
             age: a,
             gender: gend,
             nationality: nation,
             friends: vec![],
             family: vec![],
-            skills: Skills::new()
-
+            skills: Skills::new(),
         }
-
     }
-    pub fn get_uuid(&self) -> Uuid{
+    pub fn remove_friend(&mut self, person: &Person) {
+        self.friends.retain(|x| {
+            x != &StoragePerson {
+                uuid: person.uuid,
+                name: person.get_full_name(),
+            }
+        })
+    }
+
+    pub fn remove_family(&mut self, person: &Person) {
+        self.family.retain(|x| {
+            x != &StoragePerson {
+                uuid: person.uuid,
+                name: person.get_full_name(),
+            }
+        })
+    }
+    pub fn get_uuid(&self) -> Uuid {
         self.uuid
     }
     pub fn can_drive(&self) -> bool {
@@ -126,45 +149,46 @@ impl Person {
         self.skills.can_swim
     }
 
-    pub fn learn_to_swim(&mut self){
+    pub fn learn_to_swim(&mut self) {
         self.skills.set_can_swim(true);
     }
-    pub fn learn_to_drive(&mut self){
+    pub fn learn_to_drive(&mut self) {
         self.skills.set_can_drive(true);
     }
 
-    pub fn add_friend(&mut self,friend: &Person) {
-        self.friends.push(StoragePerson{
-            uuid:friend.uuid,
-            name: friend.get_full_name()
+    pub fn add_friend(&mut self, friend: &Person) {
+        self.friends.push(StoragePerson {
+            uuid: friend.uuid,
+            name: friend.get_full_name(),
         });
-
     }
 
-    pub fn add_family(&mut self,family: &Person) {
-        self.family.push(StoragePerson{
+    pub fn add_family(&mut self, family: &Person) {
+        self.family.push(StoragePerson {
             uuid: family.uuid,
-            name: family.get_full_name()
+            name: family.get_full_name(),
         });
-
     }
 
-    pub fn is_friend(&self,friend: &Person) -> bool{
-       self.friends.contains(&StoragePerson{
-           uuid: friend.uuid,
-           name: friend.get_full_name()
-       })
+    pub fn is_friend(&self, friend: &Person) -> bool {
+        self.friends.contains(&StoragePerson {
+            uuid: friend.uuid,
+            name: friend.get_full_name(),
+        })
     }
 
-    pub fn is_family(&self,family: &Person ) -> bool {
-        self.family.contains(&StoragePerson{
+    pub fn is_family(&self, family: &Person) -> bool {
+        self.family.contains(&StoragePerson {
             uuid: family.uuid,
-            name: family.get_full_name()
+            name: family.get_full_name(),
         })
     }
 
     pub fn get_full_name(&self) -> String {
-        format!("{} {} {}",self.names.first_name, self.names.middle_name, self.names.last_name)
+        format!(
+            "{} {} {}",
+            self.names.first_name, self.names.middle_name, self.names.last_name
+        )
     }
 
     pub fn get_gender(&self) -> Gender {
@@ -174,21 +198,19 @@ impl Person {
     pub fn get_nationality(&self) -> Nationality {
         self.nationality
     }
-
 }
 
 #[derive(Ord, PartialOrd, Eq, PartialEq)]
-struct StoragePerson{
+struct StoragePerson {
     uuid: Uuid,
-    name: String
-
+    name: String,
 }
 
-impl Clone for StoragePerson{
+impl Clone for StoragePerson {
     fn clone(&self) -> Self {
-        StoragePerson{
+        StoragePerson {
             uuid: self.uuid,
-            name: self.name.clone()
+            name: self.name.clone(),
         }
     }
 }
