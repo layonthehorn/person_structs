@@ -157,17 +157,25 @@ impl Person {
     }
 
     pub fn add_friend(&mut self, friend: &Person) {
-        self.friends.push(StoragePerson {
+        let friend_store = StoragePerson {
             uuid: friend.uuid,
             name: friend.get_full_name(),
-        });
+        };
+        // prevents added duplicate people
+        if !self.friends.contains(&friend_store) {
+            self.friends.push(friend_store);
+        }
     }
 
     pub fn add_family(&mut self, family: &Person) {
-        self.family.push(StoragePerson {
+        let family_store = StoragePerson {
             uuid: family.uuid,
             name: family.get_full_name(),
-        });
+        };
+        // prevents added duplicate people
+        if !self.family.contains(&family_store) {
+            self.family.push(family_store);
+        }
     }
 
     pub fn is_friend(&self, friend: &Person) -> bool {
