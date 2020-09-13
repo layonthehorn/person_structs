@@ -1,10 +1,12 @@
 #[derive(Clone,Copy,Ord, PartialOrd, Eq, PartialEq)]
+#[allow(dead_code)]
 pub enum Gender{
     Male,
     Female
 }
 
 #[derive(Clone,Copy,Ord, PartialOrd, Eq, PartialEq)]
+#[allow(dead_code)]
 pub enum Nationality {
     UnitedStates,
     Australia,
@@ -94,7 +96,7 @@ impl PartialEq for Person {
         self.get_full_name() == other.get_full_name() && self.age == other.age
     }
 }
-
+#[allow(dead_code)]
 impl Person {
     pub fn new(first: String, middle: String, last: String, a: u32, gend: Gender, nation: Nationality) -> Person {
         Person{
@@ -108,6 +110,19 @@ impl Person {
 
         }
 
+    }
+    pub fn can_drive(&self) -> bool {
+        self.skills.can_drive
+    }
+    pub fn can_swim(&self) -> bool {
+        self.skills.can_swim
+    }
+
+    pub fn learn_to_swim(&mut self){
+        self.skills.set_can_swim(true);
+    }
+    pub fn learn_to_drive(&mut self){
+        self.skills.set_can_drive(true);
     }
 
     pub fn add_friend(&mut self,friend: &Person) {
